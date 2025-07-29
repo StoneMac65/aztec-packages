@@ -48,8 +48,8 @@ import {
   TxValidationResultSchema,
   indexedTxSchema,
 } from '../tx/index.js';
-import { ValidatorsStatsSchema } from '../validators/schemas.js';
-import type { ValidatorsStats } from '../validators/types.js';
+import { SingleValidatorStatsSchema, ValidatorsStatsSchema } from '../validators/schemas.js';
+import type { SingleValidatorStats, ValidatorsStats } from '../validators/types.js';
 import { type ComponentsVersions, getVersioningResponseHandler } from '../versioning/index.js';
 import { MAX_RPC_BLOCKS_LEN, MAX_RPC_LEN, MAX_RPC_TXS_LEN } from './api_limit.js';
 import {
@@ -398,6 +398,14 @@ export interface AztecNode
   getValidatorsStats(): Promise<ValidatorsStats>;
 
   /**
+   * Returns stats for a single validator if enabled.
+   * @param validatorAddress - The validator address to get stats for.
+   * @param fromSlot - Optional start slot for filtering historical data.
+   * @param toSlot - Optional end slot for filtering historical data.
+   */
+  getValidatorStats(validatorAddress: string, fromSlot?: bigint, toSlot?: bigint): Promise<SingleValidatorStats | undefined>;
+
+  /**
    * Simulates the public part of a transaction with the current state.
    * This currently just checks that the transaction execution succeeds.
    * @param tx - The transaction to simulate.
@@ -576,6 +584,11 @@ export const AztecNodeApiSchema: ApiSchemaFor<AztecNode> = {
   getBlockHeader: z.function().args(optional(L2BlockNumberSchema)).returns(BlockHeader.schema.optional()),
 
   getValidatorsStats: z.function().returns(ValidatorsStatsSchema),
+
+  getValidatorStats: z
+    .function()
+    .args(z.string(), optional(schemas.BigInt), optional(schemas.BigInt))
+    .returns(SingleValidatorStatsSchema.optional()),
 
   simulatePublicCalls: z.function().args(Tx.schema, optional(z.boolean())).returns(PublicSimulationOutput.schema),
 
