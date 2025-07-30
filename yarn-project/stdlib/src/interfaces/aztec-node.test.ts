@@ -655,6 +655,9 @@ class MockAztecNode implements AztecNode {
   getValidatorsStats(): Promise<ValidatorsStats> {
     return Promise.resolve(this.validatorStats!);
   }
+  getValidatorStats(_validatorAddress: string, _fromSlot?: bigint, _toSlot?: bigint): Promise<SingleValidatorStats | undefined> {
+    return Promise.resolve(undefined);
+  }
   simulatePublicCalls(tx: Tx, _enforceFeePayment = false): Promise<PublicSimulationOutput> {
     expect(tx).toBeInstanceOf(Tx);
     return Promise.resolve(PublicSimulationOutput.random());
