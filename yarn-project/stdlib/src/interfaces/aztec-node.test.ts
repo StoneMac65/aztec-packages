@@ -51,7 +51,7 @@ import { TxEffect } from '../tx/tx_effect.js';
 import { TxHash } from '../tx/tx_hash.js';
 import { TxReceipt } from '../tx/tx_receipt.js';
 import type { TxValidationResult } from '../tx/validator/tx_validator.js';
-import type { ValidatorsStats } from '../validators/types.js';
+import type { SingleValidatorStats, ValidatorsStats } from '../validators/types.js';
 import { MAX_RPC_LEN } from './api_limit.js';
 import { type AztecNode, AztecNodeApiSchema } from './aztec-node.js';
 import type { SequencerConfig } from './configs.js';
